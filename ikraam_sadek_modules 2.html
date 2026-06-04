@@ -1,0 +1,793 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Modules & Expertise — Mr. Ikraam Sadek</title>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Syne:wght@400;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --navy:      #0b132b;
+      --navy-mid:  #111e3c;
+      --navy-card: #0f1a35;
+      --maroon:    #8b1a1a;
+      --maroon-lit:#c0392b;
+      --maroon-glow: rgba(139,26,26,0.45);
+      --gold:      #d4af6a;
+      --gold-lit:  #f0d080;
+      --white:     #f0eee8;
+      --muted:     #8891aa;
+      --accent:    #1e3a5f;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--navy);
+      color: var(--white);
+      font-family: 'Syne', sans-serif;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* ── Noise overlay ── */
+    body::before {
+      content: '';
+      position: fixed; inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+      opacity: 0.03;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* ── HERO HEADER ── */
+    .hero {
+      position: relative;
+      padding: 100px 40px 70px;
+      text-align: center;
+      overflow: hidden;
+      z-index: 1;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: -80px; left: 50%;
+      transform: translateX(-50%);
+      width: 700px; height: 700px;
+      background: radial-gradient(circle, rgba(139,26,26,0.18) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .hero-eyebrow {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.75rem;
+      letter-spacing: 0.35em;
+      color: var(--maroon-lit);
+      text-transform: uppercase;
+      margin-bottom: 18px;
+      opacity: 0;
+      animation: fadeUp 0.8s 0.2s forwards;
+    }
+
+    .hero-name {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(3rem, 8vw, 7rem);
+      letter-spacing: 0.06em;
+      line-height: 1;
+      color: var(--white);
+      opacity: 0;
+      animation: fadeUp 0.8s 0.4s forwards;
+    }
+
+    .hero-name span {
+      color: var(--gold);
+      position: relative;
+    }
+
+    .hero-name span::after {
+      content: '';
+      position: absolute;
+      bottom: 4px; left: 0; right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--maroon), var(--gold-lit), var(--maroon));
+      border-radius: 2px;
+    }
+
+    .hero-role {
+      font-size: 1rem;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      color: var(--muted);
+      text-transform: uppercase;
+      margin-top: 16px;
+      opacity: 0;
+      animation: fadeUp 0.8s 0.6s forwards;
+    }
+
+    .hero-divider {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      margin: 36px auto 0;
+      max-width: 300px;
+      opacity: 0;
+      animation: fadeUp 0.8s 0.8s forwards;
+    }
+
+    .hero-divider::before,
+    .hero-divider::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--maroon));
+    }
+    .hero-divider::after {
+      background: linear-gradient(90deg, var(--maroon), transparent);
+    }
+
+    .hero-divider-icon {
+      width: 8px; height: 8px;
+      background: var(--maroon-lit);
+      transform: rotate(45deg);
+    }
+
+    /* ── SECTION ── */
+    .section {
+      position: relative;
+      padding: 60px 40px 100px;
+      max-width: 1200px;
+      margin: 0 auto;
+      z-index: 1;
+    }
+
+    .section-header {
+      display: flex;
+      align-items: baseline;
+      gap: 20px;
+      margin-bottom: 60px;
+    }
+
+    .section-number {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.7rem;
+      color: var(--maroon-lit);
+      letter-spacing: 0.2em;
+    }
+
+    .section-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(2rem, 4vw, 3.5rem);
+      letter-spacing: 0.08em;
+      color: var(--white);
+    }
+
+    .section-line {
+      flex: 1;
+      height: 1px;
+      background: linear-gradient(90deg, var(--maroon), transparent);
+      margin-left: 20px;
+      align-self: center;
+    }
+
+    /* ── STATS BAR ── */
+    .stats-bar {
+      display: flex;
+      gap: 0;
+      border: 1px solid rgba(139,26,26,0.3);
+      border-radius: 4px;
+      overflow: hidden;
+      margin-bottom: 64px;
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.7s, transform 0.7s;
+    }
+
+    .stats-bar.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .stat-item {
+      flex: 1;
+      padding: 22px 28px;
+      border-right: 1px solid rgba(139,26,26,0.3);
+      background: var(--navy-card);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .stat-item:last-child { border-right: none; }
+
+    .stat-item::before {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, var(--maroon), transparent);
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.5s 0.3s;
+    }
+
+    .stats-bar.visible .stat-item::before {
+      transform: scaleX(1);
+    }
+
+    .stat-value {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 2.4rem;
+      color: var(--gold);
+      line-height: 1;
+    }
+
+    .stat-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.65rem;
+      letter-spacing: 0.2em;
+      color: var(--muted);
+      text-transform: uppercase;
+      margin-top: 4px;
+    }
+
+    /* ── GRID ── */
+    .modules-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+
+    /* ── CARD ── */
+    .card-wrap {
+      perspective: 900px;
+      height: 260px;
+      opacity: 0;
+      transform: translateY(50px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+
+    .card-wrap.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* stagger delays */
+    .card-wrap:nth-child(1) { transition-delay: 0.05s; }
+    .card-wrap:nth-child(2) { transition-delay: 0.12s; }
+    .card-wrap:nth-child(3) { transition-delay: 0.19s; }
+    .card-wrap:nth-child(4) { transition-delay: 0.26s; }
+    .card-wrap:nth-child(5) { transition-delay: 0.33s; }
+    .card-wrap:nth-child(6) { transition-delay: 0.40s; }
+
+    .card-inner {
+      width: 100%; height: 100%;
+      position: relative;
+      transform-style: preserve-3d;
+      transition: transform 0.7s cubic-bezier(0.4,0.2,0.2,1);
+    }
+
+    .card-wrap:hover .card-inner {
+      transform: rotateY(180deg);
+    }
+
+    .card-front,
+    .card-back {
+      position: absolute; inset: 0;
+      backface-visibility: hidden;
+      -webkit-backface-visibility: hidden;
+      border-radius: 6px;
+      border: 1px solid var(--maroon);
+      background: var(--navy-card);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 28px;
+      overflow: hidden;
+    }
+
+    /* front glow pulse */
+    .card-front::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at 50% 110%, rgba(139,26,26,0.25) 0%, transparent 65%);
+      transition: opacity 0.4s;
+    }
+
+    .card-wrap:hover .card-front::before {
+      opacity: 0;
+    }
+
+    /* Corner accents */
+    .card-front::after,
+    .card-back::after {
+      content: '';
+      position: absolute;
+      top: 0; right: 0;
+      width: 40px; height: 40px;
+      border-top: 2px solid var(--maroon-lit);
+      border-right: 2px solid var(--maroon-lit);
+      border-radius: 0 6px 0 0;
+    }
+
+    .card-back {
+      transform: rotateY(180deg);
+      background: linear-gradient(135deg, #12203f 0%, #0f1a35 60%, #1a0d0d 100%);
+      border-color: var(--maroon-lit);
+      gap: 14px;
+    }
+
+    .card-back::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at 50% 0%, rgba(139,26,26,0.3) 0%, transparent 60%);
+    }
+
+    /* front content */
+    .card-tag {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.62rem;
+      letter-spacing: 0.3em;
+      color: var(--maroon-lit);
+      text-transform: uppercase;
+      margin-bottom: 10px;
+    }
+
+    .card-code {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 3.2rem;
+      letter-spacing: 0.1em;
+      color: var(--white);
+      line-height: 1;
+      text-align: center;
+    }
+
+    .card-code-sub {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.7rem;
+      color: var(--muted);
+      letter-spacing: 0.15em;
+      margin-top: 8px;
+    }
+
+    .card-bar {
+      width: 40px; height: 2px;
+      background: linear-gradient(90deg, var(--maroon), var(--gold));
+      margin-top: 18px;
+      border-radius: 1px;
+    }
+
+    /* back content */
+    .back-icon {
+      width: 44px; height: 44px;
+      border-radius: 50%;
+      border: 1.5px solid var(--maroon);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.3rem;
+      position: relative;
+      z-index: 1;
+    }
+
+    .back-title {
+      font-family: 'Syne', sans-serif;
+      font-weight: 700;
+      font-size: 1rem;
+      color: var(--gold);
+      text-align: center;
+      letter-spacing: 0.03em;
+      position: relative; z-index: 1;
+    }
+
+    .back-desc {
+      font-size: 0.78rem;
+      color: var(--muted);
+      text-align: center;
+      line-height: 1.6;
+      position: relative; z-index: 1;
+      max-width: 180px;
+    }
+
+    .back-badge {
+      position: absolute;
+      bottom: 16px; right: 16px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.55rem;
+      letter-spacing: 0.2em;
+      color: var(--maroon-lit);
+      text-transform: uppercase;
+      opacity: 0.7;
+    }
+
+    /* ── EXPERTISE STRIP ── */
+    .expertise-strip {
+      margin-top: 80px;
+      padding-top: 60px;
+      border-top: 1px solid rgba(139,26,26,0.2);
+    }
+
+    .expertise-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 2px;
+      margin-top: 40px;
+    }
+
+    .exp-item {
+      background: var(--navy-card);
+      border: 1px solid rgba(139,26,26,0.2);
+      padding: 28px 22px;
+      position: relative;
+      overflow: hidden;
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.6s, transform 0.6s, border-color 0.3s;
+      cursor: default;
+    }
+
+    .exp-item.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .exp-item:nth-child(1) { transition-delay: 0.05s; }
+    .exp-item:nth-child(2) { transition-delay: 0.12s; }
+    .exp-item:nth-child(3) { transition-delay: 0.19s; }
+    .exp-item:nth-child(4) { transition-delay: 0.26s; }
+
+    .exp-item:hover {
+      border-color: var(--maroon-lit);
+    }
+
+    .exp-item::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, var(--maroon), transparent);
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.4s;
+    }
+
+    .exp-item:hover::before {
+      transform: scaleX(1);
+    }
+
+    .exp-number {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 3rem;
+      color: rgba(139,26,26,0.2);
+      line-height: 1;
+      margin-bottom: 8px;
+      transition: color 0.3s;
+    }
+
+    .exp-item:hover .exp-number {
+      color: rgba(139,26,26,0.5);
+    }
+
+    .exp-label {
+      font-weight: 700;
+      font-size: 0.85rem;
+      color: var(--white);
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+
+    .exp-text {
+      font-size: 0.75rem;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    /* ── FOOTER SIGNATURE ── */
+    .footer-sig {
+      text-align: center;
+      padding: 50px 20px 60px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .sig-line {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.65rem;
+      letter-spacing: 0.3em;
+      color: rgba(139,26,26,0.5);
+      text-transform: uppercase;
+    }
+
+    /* ── ANIMATIONS ── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to   { opacity: 1; transform: translateY(0);    }
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 900px) {
+      .modules-grid { grid-template-columns: repeat(2, 1fr); }
+      .expertise-grid { grid-template-columns: repeat(2, 1fr); }
+      .stats-bar { flex-wrap: wrap; }
+      .stat-item { min-width: 50%; border-bottom: 1px solid rgba(139,26,26,0.3); }
+      .section { padding: 40px 24px 80px; }
+    }
+
+    @media (max-width: 560px) {
+      .modules-grid { grid-template-columns: 1fr; }
+      .expertise-grid { grid-template-columns: 1fr; }
+      .hero { padding: 70px 24px 50px; }
+      .stat-item { min-width: 100%; }
+      .card-wrap { height: 230px; }
+      .section-header { flex-wrap: wrap; }
+      .section-line { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ── HERO ── -->
+  <header class="hero">
+    <p class="hero-eyebrow">// Faculty Profile — Academic Year 2026</p>
+    <h1 class="hero-name">Mr. <span>Ikraam</span> Sadek</h1>
+    <p class="hero-role">Lecturer in Software Development & Applied Computing</p>
+    <div class="hero-divider"><div class="hero-divider-icon"></div></div>
+  </header>
+
+  <!-- ── MAIN SECTION ── -->
+  <main class="section">
+
+    <!-- Section header -->
+    <div class="section-header">
+      <span class="section-number">01</span>
+      <h2 class="section-title">Modules & Expertise</h2>
+      <div class="section-line"></div>
+    </div>
+
+    <!-- Stats bar -->
+    <div class="stats-bar" id="stats">
+      <div class="stat-item">
+        <div class="stat-value">7</div>
+        <div class="stat-label">Active Modules</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-value">3</div>
+        <div class="stat-label">Disciplines</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-value">NQF 5–7</div>
+        <div class="stat-label">Levels Taught</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-value">∞</div>
+        <div class="stat-label">Dedication</div>
+      </div>
+    </div>
+
+    <!-- Module cards grid -->
+    <div class="modules-grid" id="grid">
+
+      <!-- 1 -->
+      <div class="card-wrap">
+        <div class="card-inner">
+          <div class="card-front">
+            <span class="card-tag">Module</span>
+            <div class="card-code">PRL<span style="color:var(--gold)">161</span></div>
+            <div class="card-code-sub">PRG · Level 1</div>
+            <div class="card-bar"></div>
+          </div>
+          <div class="card-back">
+            <div class="back-icon">⚙️</div>
+            <div class="back-title">Programming Logic</div>
+            <div class="back-desc">Foundational logic constructs, algorithmic thinking and problem decomposition for beginners.</div>
+            <span class="back-badge">PRL161</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 2 -->
+      <div class="card-wrap">
+        <div class="card-inner">
+          <div class="card-front">
+            <span class="card-tag">Module</span>
+            <div class="card-code">PRG<span style="color:var(--gold)">181</span></div>
+            <div class="card-code-sub">PRG · Level 1</div>
+            <div class="card-bar"></div>
+          </div>
+          <div class="card-back">
+            <div class="back-icon">💻</div>
+            <div class="back-title">Programming Fundamentals</div>
+            <div class="back-desc">Core programming concepts including variables, control structures, and introductory OOP.</div>
+            <span class="back-badge">PRG181/171</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 3 -->
+      <div class="card-wrap">
+        <div class="card-inner">
+          <div class="card-front">
+            <span class="card-tag">Module</span>
+            <div class="card-code">WPR<span style="color:var(--gold)">281</span></div>
+            <div class="card-code-sub">WPR · Level 2</div>
+            <div class="card-bar"></div>
+          </div>
+          <div class="card-back">
+            <div class="back-icon">🌐</div>
+            <div class="back-title">Web Programming</div>
+            <div class="back-desc">Client-side and server-side web development, responsive design and web application architecture.</div>
+            <span class="back-badge">WPR281/271</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 4 -->
+      <div class="card-wrap">
+        <div class="card-inner">
+          <div class="card-front">
+            <span class="card-tag">Module</span>
+            <div class="card-code">PRG<span style="color:var(--gold)">261</span></div>
+            <div class="card-code-sub">PRG · Level 2</div>
+            <div class="card-bar"></div>
+          </div>
+          <div class="card-back">
+            <div class="back-icon">🧩</div>
+            <div class="back-title">Object-Oriented Programming</div>
+            <div class="back-desc">Advanced OOP paradigms, design patterns, inheritance, and polymorphism in practice.</div>
+            <span class="back-badge">PRG261/262</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 5 -->
+      <div class="card-wrap">
+        <div class="card-inner">
+          <div class="card-front">
+            <span class="card-tag">Module</span>
+            <div class="card-code">SWA<span style="color:var(--gold)">261</span></div>
+            <div class="card-code-sub">SWA · Level 2</div>
+            <div class="card-bar"></div>
+          </div>
+          <div class="card-back">
+            <div class="back-icon">📐</div>
+            <div class="back-title">Software Applications</div>
+            <div class="back-desc">Applied software development, application design lifecycle, and end-to-end project delivery.</div>
+            <span class="back-badge">SWA261</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 6 -->
+      <div class="card-wrap">
+        <div class="card-inner">
+          <div class="card-front">
+            <span class="card-tag">Module</span>
+            <div class="card-code">SWT<span style="color:var(--gold)">261</span></div>
+            <div class="card-code-sub">SWT · Level 2</div>
+            <div class="card-bar"></div>
+          </div>
+          <div class="card-back">
+            <div class="back-icon">🔬</div>
+            <div class="back-title">Software Testing</div>
+            <div class="back-desc">QA methodologies, unit testing, test automation, and software quality assurance practices.</div>
+            <span class="back-badge">SWT261</span>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /grid -->
+
+    <!-- ── EXPERTISE STRIP ── -->
+    <div class="expertise-strip">
+      <div class="section-header">
+        <span class="section-number">02</span>
+        <h2 class="section-title">Core Expertise</h2>
+        <div class="section-line"></div>
+      </div>
+
+      <div class="expertise-grid" id="expertise">
+        <div class="exp-item">
+          <div class="exp-number">01</div>
+          <div class="exp-label">Software Engineering</div>
+          <div class="exp-text">Full software development lifecycle — from requirements analysis through design, coding, and deployment.</div>
+        </div>
+        <div class="exp-item">
+          <div class="exp-number">02</div>
+          <div class="exp-label">Web Technologies</div>
+          <div class="exp-text">Modern web programming, responsive interfaces, and server-side application architecture.</div>
+        </div>
+        <div class="exp-item">
+          <div class="exp-number">03</div>
+          <div class="exp-label">Programming Languages</div>
+          <div class="exp-text">Object-oriented and procedural programming across multiple languages from foundational to advanced levels.</div>
+        </div>
+        <div class="exp-item">
+          <div class="exp-number">04</div>
+          <div class="exp-label">Quality & Testing</div>
+          <div class="exp-text">Software quality assurance, systematic testing methodologies, and automated test strategies.</div>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- ── FOOTER ── -->
+  <footer class="footer-sig">
+    <p class="sig-line">// Mr. Ikraam Sadek · Modules & Expertise · © 2026</p>
+  </footer>
+
+  <script>
+    // ── Intersection Observer for scroll-triggered animations ──
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
+      });
+    }, { threshold: 0.12 });
+
+    // Observe stats bar
+    document.querySelectorAll('#stats, .exp-item').forEach(el => observer.observe(el));
+
+    // Observe cards
+    document.querySelectorAll('.card-wrap').forEach(el => observer.observe(el));
+
+    // ── Touch / click flip support for mobile ──
+    document.querySelectorAll('.card-wrap').forEach(card => {
+      card.addEventListener('click', () => {
+        card.classList.toggle('flipped');
+        const inner = card.querySelector('.card-inner');
+        if (card.classList.contains('flipped')) {
+          inner.style.transform = 'rotateY(180deg)';
+        } else {
+          inner.style.transform = '';
+        }
+      });
+    });
+
+    // ── Subtle parallax on hero on mousemove ──
+    const hero = document.querySelector('.hero');
+    document.addEventListener('mousemove', (e) => {
+      const cx = window.innerWidth / 2;
+      const cy = window.innerHeight / 2;
+      const dx = (e.clientX - cx) / cx;
+      const dy = (e.clientY - cy) / cy;
+      hero.style.backgroundPosition = `${50 + dx * 3}% ${50 + dy * 3}%`;
+    });
+
+    // ── Animate stat numbers counting up ──
+    function countUp(el, target, isText) {
+      if (isText) return; // skip non-numeric
+      let start = 0;
+      const duration = 1200;
+      const step = duration / (target || 1);
+      const timer = setInterval(() => {
+        start++;
+        el.textContent = start;
+        if (start >= target) clearInterval(timer);
+      }, step);
+    }
+
+    const statsObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          document.querySelectorAll('.stat-value').forEach(v => {
+            const raw = v.textContent.trim();
+            const num = parseInt(raw);
+            if (!isNaN(num)) {
+              v.textContent = '0';
+              countUp(v, num, false);
+            }
+          });
+          statsObserver.disconnect();
+        }
+      });
+    }, { threshold: 0.4 });
+    statsObserver.observe(document.getElementById('stats'));
+  </script>
+</body>
+</html>
